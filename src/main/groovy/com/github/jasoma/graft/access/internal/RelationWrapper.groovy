@@ -92,6 +92,9 @@ class RelationWrapper implements NeoRelationship {
     }
 
     def asType(Class type) {
+        if (type == Map.class) {
+            return properties()
+        }
         return unwrap(type)
     }
 

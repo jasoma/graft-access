@@ -8,6 +8,9 @@ ext {
     neoVersion = '3.0.4'
 }
 
+group 'com.github.jasoma'
+version "$neoVersion"
+
 task sourcesJar(type: Jar, dependsOn: classes) {
     classifier = 'sources'
     from sourceSets.main.allSource
@@ -23,8 +26,13 @@ artifacts {
     archives javadocJar
 }
 
-group 'com.github.jasoma'
-version "$neoVersion"
+test {
+    testLogging {
+        events 'passed', 'skipped', 'failed'
+        exceptionFormat 'full'
+        showStandardStreams true
+    }
+}
 
 repositories {
     mavenLocal()

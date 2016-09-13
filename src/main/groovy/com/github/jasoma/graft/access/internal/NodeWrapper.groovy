@@ -93,6 +93,9 @@ class NodeWrapper implements NeoNode {
     }
 
     def asType(Class type) {
+        if (type == Map.class) {
+            return properties()
+        }
         return unwrap(type)
     }
 

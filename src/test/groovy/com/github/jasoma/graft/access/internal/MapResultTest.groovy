@@ -12,16 +12,21 @@ import org.junit.Test
 
 class MapResultTest {
 
-    def static seed = "CREATE (s:Test {location:'start'})-[r:Test {location:'middle'}]->(e:Test {location:'end'})"
-    def static query = "MATCH (s:Test {location:'start'})-[r:Test {location:'middle'}]->(e:Test {location:'end'}) RETURN s,r,e"
-    def static clean = "MATCH (s:Test)-[r:Test]-(e:Test) DELETE s,r,e"
+    def static u = new Random().nextLong()
+    def static seed = "CREATE (s:Test {location:'start', u: {u}})-[r:Test {location:'middle', u: {u}}]->(e:Test {location:'end', u: {u}})"
+    def static query = "MATCH (s:Test {location:'start', u: $u})-[r:Test {location:'middle', u: $u}]->(e:Test {location:'end', u: $u}) RETURN s,r,e"
+    def static clean = "MATCH (s:Test {u: $u})-[r:Test {u: $u}]-(e:Test {u: $u}) DELETE s,r,e"
 
     @ClassRule public static NeoServerConnection server = new NeoServerConnection()
-    @ClassRule public static InMemoryDatabase embedded = new InMemoryDatabase(seed)
+    @ClassRule public static InMemoryDatabase embedded = new InMemoryDatabase()
 
     @BeforeClass
     def static void prepare() {
-        server.withSession { session -> session.run(seed).consume() }
+        server.withSession { session -> session.run(seed, [u: u]).consume() }
+        embedded.withTransaction { db ->
+            db.execute(seed, [u: u])
+            success()
+        }
     }
 
     @AfterClass
