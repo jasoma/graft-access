@@ -1,8 +1,7 @@
 package com.github.jasoma.graft.access.internal
 
 import com.github.jasoma.graft.access.NeoRelationship
-import com.sun.javaws.exceptions.InvalidArgumentException
-
+import com.github.jasoma.graft.access.ResultRow
 /**
  * Wraps either a driver or an embedded relationship to the {@link NeoRelationship} interface.
  */
@@ -19,9 +18,9 @@ class RelationWrapper implements NeoRelationship {
      *
      * @param object the object to attempt to wrap.
      * @return a new relation wrapper instance.
-     * @throws InvalidArgumentException if the object is null or not a supported relation type.
+     * @throws ResultRow.ResultTypeMismatch if the object is null or not a supported relation type.
      */
-    def static RelationWrapper wrap(Object object) throws InvalidArgumentException {
+    def static RelationWrapper wrap(Object object) throws ResultRow.ResultTypeMismatch {
         if (object instanceof RelationWrapper) {
             return object
         }
@@ -31,7 +30,7 @@ class RelationWrapper implements NeoRelationship {
         if (object instanceof org.neo4j.graphdb.Relationship) {
             return new RelationWrapper(object as org.neo4j.graphdb.Relationship)
         }
-        throw new InvalidArgumentException("Cannot wrap object ($object) into a relationship");
+        throw new ResultRow.ResultTypeMismatch("Cannot wrap object ($object) into a relationship");
     }
 
     /**

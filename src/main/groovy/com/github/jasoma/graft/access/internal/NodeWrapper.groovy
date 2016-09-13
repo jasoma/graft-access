@@ -1,7 +1,7 @@
 package com.github.jasoma.graft.access.internal
 
 import com.github.jasoma.graft.access.NeoNode
-import com.sun.javaws.exceptions.InvalidArgumentException
+import com.github.jasoma.graft.access.ResultRow
 
 /**
  * Wraps either a driver or an embedded node to the {@link NeoNode} interface.
@@ -19,9 +19,9 @@ class NodeWrapper implements NeoNode {
      *
      * @param object the object to attempt to wrap.
      * @return a new node wrapper instance.
-     * @throws InvalidArgumentException if the object is null or not a supported node type.
+     * @throws ResultRow.ResultTypeMismatch if the object is null or not a supported node type.
      */
-    def static NodeWrapper wrap(Object object) throws InvalidArgumentException {
+    def static NodeWrapper wrap(Object object) throws ResultRow.ResultTypeMismatch {
         if (object instanceof NodeWrapper) {
             return object
         }
@@ -31,7 +31,7 @@ class NodeWrapper implements NeoNode {
         if (object instanceof org.neo4j.graphdb.Node) {
             return new NodeWrapper(object as org.neo4j.graphdb.Node)
         }
-        throw new InvalidArgumentException("Cannot wrap object ($object) into a node");
+        throw new ResultRow.ResultTypeMismatch("Cannot wrap object ($object) into a node");
     }
 
     /**

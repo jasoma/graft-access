@@ -1,6 +1,5 @@
-package com.github.jasoma.neogroove.internal
+package com.github.jasoma.graft.access.internal
 
-import com.github.jasoma.graft.access.internal.RelationWrapper
 import com.github.jasoma.graft.test.InMemoryDatabase
 import com.github.jasoma.graft.test.NeoServerConnection
 import org.junit.ClassRule

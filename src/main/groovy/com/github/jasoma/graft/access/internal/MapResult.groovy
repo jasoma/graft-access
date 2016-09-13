@@ -35,7 +35,7 @@ class MapResult implements ResultRow {
 
     private NeoNode wrapNode(String key, Object value) {
         try {
-            def node = com.github.jasoma.neogroove.internal.NodeWrapper.wrap(value)
+            def node = NodeWrapper.wrap(value)
             resultMap[key] = node
             return node
         }

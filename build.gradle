@@ -41,4 +41,6 @@ dependencies {
     testCompile group: 'com.github.jasoma', name: 'graft-test', version: neoVersion
     testCompile group: 'org.neo4j.driver', name: 'neo4j-java-driver', version: '1.0.3'
     testCompile group: 'org.neo4j', name: 'neo4j-kernel', version: neoVersion
+    testCompile group: 'org.neo4j', name: 'neo4j-lucene-index', version: neoVersion
+    testCompile group: 'org.neo4j', name: 'neo4j-cypher', version: neoVersion
 }

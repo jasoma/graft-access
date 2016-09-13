@@ -1,9 +1,8 @@
-package com.github.jasoma.neogroove.internal
+package com.github.jasoma.graft.access.internal
 
 import com.github.jasoma.graft.access.NeoNode
 import com.github.jasoma.graft.access.NeoRelationship
 import com.github.jasoma.graft.access.ResultRow
-import com.github.jasoma.graft.access.internal.MapResult
 import com.github.jasoma.graft.test.InMemoryDatabase
 import com.github.jasoma.graft.test.NeoServerConnection
 import org.junit.AfterClass
