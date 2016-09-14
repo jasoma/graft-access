@@ -4,6 +4,9 @@ import com.github.jasoma.graft.test.InMemoryDatabase
 import org.junit.BeforeClass
 import org.junit.ClassRule
 import org.junit.Test
+import org.neo4j.graphdb.Result
+
+import static org.mockito.Mockito.*
 
 class EmbeddedResultSetTest {
 
@@ -38,6 +41,32 @@ class EmbeddedResultSetTest {
             }
             assert found == count
         }
+    }
+
+    @Test
+    def void testClosesTxOnExhaustion() {
+        def tx = mock(TransactionHandler)
+        def rowIterator = [new HashMap(), new HashMap()].iterator()
+        def dbResult = [
+                next: { rowIterator.next() },
+                hasNext: { rowIterator.hasNext() }
+        ] as Result
+
+        def results = new EmbeddedResultSet(dbResult, tx)
+        results.each { /* no-op, just want to run the whole iterator */}
+
+        verify(tx).success()
+        verify(tx).close()
+    }
+
+    @Test
+    def void testClosesTxOnClose() {
+        def tx = mock(TransactionHandler)
+        def results = new EmbeddedResultSet(mock(Result), tx)
+
+        results.close()
+        verify(tx).success()
+        verify(tx).close()
     }
 
 }

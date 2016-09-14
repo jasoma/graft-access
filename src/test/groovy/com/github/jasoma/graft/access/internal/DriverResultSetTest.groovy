@@ -6,6 +6,9 @@ import org.junit.BeforeClass
 import org.junit.ClassRule
 import org.junit.Test
 
+import static org.mockito.Mockito.mock
+import static org.mockito.Mockito.verify
+
 class DriverResultSetTest {
 
     def static u = new Random().nextLong()
@@ -40,6 +43,30 @@ class DriverResultSetTest {
                 found++
             }
             assert found == count
+        }
+    }
+
+    @Test
+    def void testClosesTxOnExhaustion() {
+        server.withSession { s ->
+            def tx = mock(TransactionHandler)
+            def results = new DriverResultSet(s.run(query), tx)
+            results.each { /* no-op, just want to run the whole iterator */}
+
+            verify(tx).success()
+            verify(tx).close()
+        }
+    }
+
+    @Test
+    def void testClosesTxOnClose() {
+        server.withSession { s ->
+            def tx = mock(TransactionHandler)
+            def results = new DriverResultSet(s.run(query), tx)
+            results.close()
+
+            verify(tx).success()
+            verify(tx).close()
         }
     }
 

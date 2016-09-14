@@ -9,4 +9,4 @@ package com.github.jasoma.graft.access
  * @see org.neo4j.graphdb.Result
  * @see ResultRow
  */
-interface ResultSet extends Iterator<ResultRow> { }
+interface ResultSet extends Iterator<ResultRow>, AutoCloseable { }
