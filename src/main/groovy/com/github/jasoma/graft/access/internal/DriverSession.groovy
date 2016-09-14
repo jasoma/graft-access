@@ -16,6 +16,7 @@ class DriverSession implements NeoSession {
 
     private final Session session
     private DriverTransaction currentTx
+    private List<DriverTransaction> manualTxs = []
 
     /**
      * Constructor.
@@ -53,10 +54,24 @@ class DriverSession implements NeoSession {
     }
 
     @Override
+    TransactionHandler beginTransaction() {
+        manualTxs.removeAll { !it.isOpen }
+        def tx = new DriverTransaction(session.beginTransaction())
+        manualTxs << tx
+        return tx
+    }
+
+    @Override
     void close() throws Exception {
         if (currentTx?.isOpen) {
             log.warn("Implicit transaction open during session close, closing the transaction also")
             currentTx.close()
+        }
+        manualTxs.each { tx ->
+            if (tx.isOpen) {
+                log.warn("Manual transaction open during session close, closing the transaction also")
+                tx.close()
+            }
         }
         session.close()
     }

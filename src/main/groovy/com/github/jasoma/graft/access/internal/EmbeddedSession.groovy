@@ -16,6 +16,7 @@ class EmbeddedSession implements NeoSession {
 
     private final GraphDatabaseService db
     private EmbeddedTransaction currentTx
+    private List<EmbeddedTransaction> manualTxs = []
 
     /**
      * Constructor.
@@ -53,10 +54,24 @@ class EmbeddedSession implements NeoSession {
     }
 
     @Override
+    TransactionHandler beginTransaction() {
+        manualTxs.removeAll { !it.isOpen }
+        def tx = new EmbeddedTransaction(db.beginTx())
+        manualTxs << tx
+        return tx
+    }
+
+    @Override
     void close() throws Exception {
         if (currentTx?.isOpen) {
             log.warn("Implicit transaction open during session close, closing the transaction also")
             currentTx.close()
+        }
+        manualTxs.each { tx ->
+            if (tx.isOpen) {
+                log.warn("Manual transaction open during session close, closing the transaction also")
+                tx.close()
+            }
         }
     }
 

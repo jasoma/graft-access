@@ -88,4 +88,15 @@ interface NeoSession extends AutoCloseable {
     def void withTransaction(@DelegatesTo(TransactionHandler)
                              @ClosureParams(value = SimpleType, options = "com.github.jasoma.graft.access.NeoSession") Closure closure)
 
+    /**
+     * Begins a new transaction with the underlying database. If the transaction remains open when the session is closed the transaction
+     * will be closed also. The transaction must always be explicitly closed, {@link TransactionHandler#success} and
+     * {@link TransactionHandler#failure} do not themselves close the transaction.
+     * <p>
+     * This is a method is a convenience for Java users. Groovy code should make use of {@link NeoSession#withTransaction} instead.
+     *
+     * @return a handler for marking the transaction as success or failure.
+     */
+    def TransactionHandler beginTransaction()
+
 }

@@ -74,4 +74,16 @@ class DriverSessionTest {
         verify(tx).close()
         verify(innerSession).close()
     }
+
+    @Test
+    def void testClosesManualTransactionsWhenClosed() {
+        def txs = [mock(Transaction), mock(Transaction)]
+        when(innerSession.beginTransaction()).thenReturn(txs.first(), txs.last())
+
+        session.beginTransaction()
+        session.beginTransaction()
+        session.close()
+
+        txs.each { tx -> verify(tx).close() }
+    }
 }
