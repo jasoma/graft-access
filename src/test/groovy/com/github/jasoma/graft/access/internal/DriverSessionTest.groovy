@@ -22,8 +22,8 @@ class DriverSessionTest {
 
         session.run("query")
 
-        verify(this.innerSession).beginTransaction()
-        verify(this.innerSession).run("query")
+        verify(innerSession).beginTransaction()
+        verify(tx).run("query")
     }
 
     @Test
@@ -33,8 +33,8 @@ class DriverSessionTest {
 
         session.run("query", with: 'params')
 
-        verify(this.innerSession).beginTransaction()
-        verify(this.innerSession).run("query", [with: 'params'])
+        verify(innerSession).beginTransaction()
+        verify(tx).run("query", [with: 'params'])
     }
 
     @Test
@@ -75,15 +75,4 @@ class DriverSessionTest {
         verify(innerSession).close()
     }
 
-    @Test
-    def void testClosesManualTransactionsWhenClosed() {
-        def txs = [mock(Transaction), mock(Transaction)]
-        when(innerSession.beginTransaction()).thenReturn(txs.first(), txs.last())
-
-        session.beginTransaction()
-        session.beginTransaction()
-        session.close()
-
-        txs.each { tx -> verify(tx).close() }
-    }
 }

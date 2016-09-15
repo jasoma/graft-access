@@ -46,6 +46,7 @@ dependencies {
 
     compileOnly group: 'org.neo4j.driver', name: 'neo4j-java-driver', version: '1.0.3'
     compileOnly group: 'org.neo4j', name: 'neo4j-kernel', version: neoVersion
+    compileOnly group: 'com.github.jasoma', name: 'neo4j-memorydb', version: neoVersion
 
     testCompile group: 'junit', name: 'junit', version: '4.12'
     testCompile group: 'com.github.jasoma', name: 'graft-test', version: neoVersion

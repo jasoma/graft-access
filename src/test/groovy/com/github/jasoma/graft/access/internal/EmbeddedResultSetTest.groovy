@@ -1,5 +1,6 @@
 package com.github.jasoma.graft.access.internal
 
+import com.github.jasoma.graft.access.TransactionHandler
 import com.github.jasoma.graft.test.InMemoryDatabase
 import org.junit.BeforeClass
 import org.junit.ClassRule

@@ -2,6 +2,7 @@ package com.github.jasoma.graft.access.internal
 
 import com.github.jasoma.graft.access.ResultRow
 import com.github.jasoma.graft.access.ResultSet
+import com.github.jasoma.graft.access.TransactionHandler
 import org.neo4j.driver.v1.StatementResult
 
 /**

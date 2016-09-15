@@ -1,5 +1,6 @@
 package com.github.jasoma.graft.access.internal
 
+import com.github.jasoma.graft.access.TransactionHandler
 import com.github.jasoma.graft.test.NeoServerConnection
 import org.junit.AfterClass
 import org.junit.BeforeClass

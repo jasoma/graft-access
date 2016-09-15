@@ -2,6 +2,7 @@ package com.github.jasoma.graft.access.internal
 
 import com.github.jasoma.graft.access.NeoSession
 import com.github.jasoma.graft.access.ResultSet
+import com.github.jasoma.graft.access.TransactionHandler
 import groovy.transform.stc.ClosureParams
 import groovy.transform.stc.SimpleType
 import groovy.util.logging.Slf4j
@@ -42,6 +43,12 @@ class EmbeddedSession implements NeoSession {
     @Override
     void withTransaction(@DelegatesTo(TransactionHandler)
                          @ClosureParams(value = SimpleType, options = "com.github.jasoma.graft.access.NeoSession") Closure closure) {
+
+        if (currentTx?.isOpen) {
+            log.warn("Implicit transaction open during explicit transaction creating, closing the implicit transaction first.")
+            currentTx.close()
+        }
+
         def tx = new EmbeddedTransaction(db.beginTx())
         closure.delegate = tx
         closure.resolveStrategy = Closure.DELEGATE_FIRST
@@ -51,14 +58,6 @@ class EmbeddedSession implements NeoSession {
         finally {
             tx.close()
         }
-    }
-
-    @Override
-    TransactionHandler beginTransaction() {
-        manualTxs.removeAll { !it.isOpen }
-        def tx = new EmbeddedTransaction(db.beginTx())
-        manualTxs << tx
-        return tx
     }
 
     @Override
@@ -84,7 +83,7 @@ class EmbeddedSession implements NeoSession {
         return currentTx
     }
 
-    private class EmbeddedTransaction implements TransactionHandler {
+    private static class EmbeddedTransaction implements TransactionHandler {
 
         private final Transaction tx;
         private def isOpen = true

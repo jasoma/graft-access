@@ -1,4 +1,4 @@
-package com.github.jasoma.graft.access.internal
+package com.github.jasoma.graft.access
 
 /**
  * Common interface over the driver and embedded specific Transaction classes.

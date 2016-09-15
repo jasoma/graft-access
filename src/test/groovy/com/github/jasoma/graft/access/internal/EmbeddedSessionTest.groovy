@@ -74,15 +74,4 @@ class EmbeddedSessionTest {
         verify(tx).close()
     }
 
-    @Test
-    def void testClosesManualTransactionsWhenClosed() {
-        def txs = [mock(Transaction), mock(Transaction)]
-        when(db.beginTx()).thenReturn(txs.first(), txs.last())
-
-        session.beginTransaction()
-        session.beginTransaction()
-        session.close()
-
-        txs.each { tx -> verify(tx).close() }
-    }
 }

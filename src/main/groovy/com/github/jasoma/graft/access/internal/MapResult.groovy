@@ -16,8 +16,10 @@ class MapResult implements ResultRow {
      * Construct the wrapper.
      *
      * @param resultMap the query results in map form.
+     * @param copyValues whether or not a copy should be made of the resultMap, this should be true anytime
+     *                   the map comes directly from the database as it will be mutated internally.
      */
-    MapResult(Map<String, Object> resultMap) {
+    MapResult(Map<String, Object> resultMap, boolean copyValues = true) {
         this.resultMap = new HashMap<>(resultMap)
     }
 
